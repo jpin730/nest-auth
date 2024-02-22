@@ -50,4 +50,9 @@ export class AuthController {
   login(@Body() loginDto: LoginDto): Promise<LoginResponse> {
     return this.authService.login(loginDto)
   }
+
+  @Post('register')
+  register(@Body() createUserDto: CreateUserDto): Promise<LoginResponse> {
+    return this.authService.register(createUserDto)
+  }
 }

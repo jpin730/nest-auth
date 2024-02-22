@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  HttpException,
   Injectable,
   InternalServerErrorException,
   UnauthorizedException,
@@ -74,11 +75,26 @@ export class AuthService {
     }
   }
 
+  async register(createUserDto: CreateUserDto): Promise<LoginResponse> {
+    try {
+      const user = await this.create(createUserDto)
+      const { _id } = user
+      const token = this.generateJWT({ _id })
+      return { ...user, token }
+    } catch (error) {
+      this.errorHandler(error)
+    }
+  }
+
   private generateJWT(payload: JwtPayload): string {
     return this.jwtService.sign(payload)
   }
 
   private errorHandler(error: any): void {
+    if (error instanceof HttpException) {
+      throw error
+    }
+
     console.error(error)
 
     if (error.code === 11000 && error.keyPattern?.email) {
