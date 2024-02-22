@@ -10,13 +10,14 @@ import {
 import { AuthService } from './auth.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
+import { User } from './entities/user.entity'
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post()
-  create(@Body() createAuthDto: CreateUserDto): string {
+  create(@Body() createAuthDto: CreateUserDto): Promise<User> {
     return this.authService.create(createAuthDto)
   }
 

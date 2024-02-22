@@ -11,7 +11,7 @@ export class User {
   email: string
 
   @Prop({ required: true })
-  password: string
+  password?: string
 
   @Prop({ required: true })
   name: string
