@@ -6,33 +6,33 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { LoginDto } from './dto/login.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { User } from './entities/user.entity'
+import { AuthGuard } from './guards/auth.guard'
 import { LoginResponse } from './interfaces/login-response.interface'
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
   create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.authService.create(createUserDto)
   }
 
+  @UseGuards(AuthGuard)
   @Get()
-  findAll(): string {
+  findAll(): Promise<User[]> {
     return this.authService.findAll()
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string): string {
-    return this.authService.findOne(+id)
-  }
-
+  @UseGuards(AuthGuard)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -41,6 +41,7 @@ export class AuthController {
     return this.authService.update(+id, updateUserDto)
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string): string {
     return this.authService.remove(+id)

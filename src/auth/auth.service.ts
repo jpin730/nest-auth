@@ -38,12 +38,13 @@ export class AuthService {
     }
   }
 
-  findAll(): string {
-    return `This action returns all auth`
-  }
-
-  findOne(id: number): string {
-    return `This action returns a #${id} auth`
+  async findAll(): Promise<User[]> {
+    try {
+      const users = await this.userModel.find().select('-password')
+      return users
+    } catch (error) {
+      this.errorHandler(error)
+    }
   }
 
   update(id: number, updateUserDto: UpdateUserDto): string {
