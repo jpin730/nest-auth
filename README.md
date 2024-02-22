@@ -1,6 +1,6 @@
 # Nest Auth
 
-This is a simple project to demonstrate how to use JWT authentication with NestJS.
+This is a simple project to demonstrate how to use JWT authentication with NestJS. It connects to a MongoDB database.
 
 ## Installation
 
