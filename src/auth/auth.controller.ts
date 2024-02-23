@@ -38,8 +38,8 @@ export class AuthController {
   update(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
-  ): string {
-    return this.authService.update(+id, updateUserDto)
+  ): Promise<User> {
+    return this.authService.update(id, updateUserDto)
   }
 
   @UseGuards(AuthGuard)

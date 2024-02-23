@@ -47,9 +47,24 @@ export class AuthService {
     }
   }
 
-  update(id: number, updateUserDto: UpdateUserDto): string {
-    updateUserDto
-    return `This action updates a #${id} auth`
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+    try {
+      const user = await this.userModel.findById(id).select('-password')
+      if (!user) {
+        throw new BadRequestException('User not found')
+      }
+      const updatedUser = await this.userModel.findByIdAndUpdate(
+        id,
+        updateUserDto,
+        {
+          new: true,
+        },
+      )
+      delete updatedUser.password
+      return updatedUser
+    } catch (error) {
+      this.errorHandler(error)
+    }
   }
 
   remove(id: number): string {
