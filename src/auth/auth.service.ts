@@ -16,6 +16,13 @@ import { User } from './entities/user.entity'
 import { JwtPayload } from './interfaces/jwt-payload.interface'
 import { LoginResponse } from './interfaces/login-response.interface'
 
+const EXPIRES_IN = {
+  TOKEN: '1m',
+  REFRESH: '2m',
+}
+
+const MAX_USERS = 5
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -25,6 +32,10 @@ export class AuthService {
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {
+      const usersCount = await this.userModel.countDocuments()
+      if (usersCount === MAX_USERS) {
+        throw new BadRequestException('Maximum number of users reached')
+      }
       const newUser = new this.userModel({
         ...createUserDto,
         password: hashSync(createUserDto.password),
@@ -96,8 +107,8 @@ export class AuthService {
         throw new UnauthorizedException('Invalid credentials')
       }
       const { _id } = userLogged
-      const token = this.generateJWT({ _id }, '1m')
-      const refresh = this.generateJWT({ _id }, '2m')
+      const token = this.generateJWT({ _id }, EXPIRES_IN.TOKEN)
+      const refresh = this.generateJWT({ _id }, EXPIRES_IN.REFRESH)
       const user = { ...userLogged.toJSON() }
       delete user.password
       return { ...user, token, refresh }
@@ -110,8 +121,8 @@ export class AuthService {
     try {
       const user = await this.create(createUserDto)
       const { _id } = user
-      const token = this.generateJWT({ _id }, '1m')
-      const refresh = this.generateJWT({ _id }, '2m')
+      const token = this.generateJWT({ _id }, EXPIRES_IN.TOKEN)
+      const refresh = this.generateJWT({ _id }, EXPIRES_IN.REFRESH)
       return { ...user, token, refresh }
     } catch (error) {
       this.errorHandler(error)
@@ -121,8 +132,8 @@ export class AuthService {
   async refresh(user: User): Promise<LoginResponse> {
     try {
       const { _id } = user
-      const token = this.generateJWT({ _id }, '1m')
-      const refresh = this.generateJWT({ _id }, '2m')
+      const token = this.generateJWT({ _id }, EXPIRES_IN.TOKEN)
+      const refresh = this.generateJWT({ _id }, EXPIRES_IN.REFRESH)
       return { ...user, token, refresh }
     } catch (error) {
       this.errorHandler(error)
