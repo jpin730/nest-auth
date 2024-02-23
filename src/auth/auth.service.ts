@@ -49,9 +49,12 @@ export class AuthService {
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     try {
-      const user = await this.userModel.findById(id).select('-password')
+      const user = await this.userModel.findById(id)
       if (!user) {
         throw new BadRequestException('User not found')
+      }
+      if (user.email === 'admin@email.com') {
+        throw new BadRequestException('You cannot update default admin user')
       }
       const updatedUser = await this.userModel.findByIdAndUpdate(
         id,
@@ -60,15 +63,26 @@ export class AuthService {
           new: true,
         },
       )
-      delete updatedUser.password
-      return updatedUser
+      return { ...updatedUser.toJSON(), password: undefined }
     } catch (error) {
       this.errorHandler(error)
     }
   }
 
-  remove(id: number): string {
-    return `This action removes a #${id} auth`
+  async remove(id: string): Promise<User> {
+    try {
+      const user = await this.userModel.findById(id)
+      if (!user) {
+        throw new BadRequestException('User not found')
+      }
+      if (user.email === 'admin@email.com') {
+        throw new BadRequestException('You cannot delete default admin user')
+      }
+      const deletedUser = await this.userModel.findByIdAndDelete(id)
+      return { ...deletedUser.toJSON(), password: undefined }
+    } catch (error) {
+      this.errorHandler(error)
+    }
   }
 
   async login(loginDto: LoginDto): Promise<LoginResponse> {

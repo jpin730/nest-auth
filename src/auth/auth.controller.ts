@@ -44,8 +44,8 @@ export class AuthController {
 
   @UseGuards(AuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string): string {
-    return this.authService.remove(+id)
+  remove(@Param('id') id: string): Promise<User> {
+    return this.authService.remove(id)
   }
 
   @Post('login')
