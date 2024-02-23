@@ -4,6 +4,14 @@ This is a simple project to demonstrate how to use JWT authentication with NestJ
 
 ## Installation
 
+Select Node version using NVM.
+
+```bash
+nvm use
+```
+
+> NOTE: Some cases `nvm install` is required to install the selected version.
+
 ```bash
 npm install
 ```
@@ -11,9 +19,6 @@ npm install
 ## Running the app
 
 ```bash
-# development
-npm run start
-
 # watch mode
 npm run start:dev
 
@@ -21,15 +26,6 @@ npm run start:dev
 npm run start:prod
 ```
 
-## Test
+## Deployment
 
-```bash
-# unit tests
-npm run test
-
-# e2e tests
-npm run test:e2e
-
-# test coverage
-npm run test:cov
-```
+App deployed on: <https://nest-auth-9jfg.onrender.com>.
