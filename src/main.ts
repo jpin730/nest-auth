@@ -1,5 +1,6 @@
 import { ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { AppModule } from './app.module'
 
 async function bootstrap(): Promise<void> {
@@ -10,6 +11,15 @@ async function bootstrap(): Promise<void> {
       forbidNonWhitelisted: true,
     }),
   )
+  const config = new DocumentBuilder()
+    .setTitle('Nest Auth API')
+    .setDescription(
+      'This is a simple project to demonstrate how to use JWT authentication with NestJS. It connects to a MongoDB database.',
+    )
+    .addBearerAuth()
+    .build()
+  const document = SwaggerModule.createDocument(app, config)
+  SwaggerModule.setup('', app, document)
   await app.listen(process.env.PORT || 3000)
 }
 bootstrap()
