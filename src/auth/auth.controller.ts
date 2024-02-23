@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Request,
   UseGuards,
 } from '@nestjs/common'
 import { AuthService } from './auth.service'
@@ -55,5 +56,12 @@ export class AuthController {
   @Post('register')
   register(@Body() createUserDto: CreateUserDto): Promise<LoginResponse> {
     return this.authService.register(createUserDto)
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('refresh')
+  refresh(@Request() request: Request): Promise<LoginResponse> {
+    const user = request['user'] as User
+    return this.authService.refresh(user)
   }
 }

@@ -67,10 +67,11 @@ export class AuthService {
         throw new UnauthorizedException('Invalid credentials')
       }
       const { _id } = userLogged
-      const token = this.generateJWT({ _id })
+      const token = this.generateJWT({ _id }, '1m')
+      const refresh = this.generateJWT({ _id }, '2m')
       const user = { ...userLogged.toJSON() }
       delete user.password
-      return { ...user, token }
+      return { ...user, token, refresh }
     } catch (error) {
       this.errorHandler(error)
     }
@@ -80,8 +81,20 @@ export class AuthService {
     try {
       const user = await this.create(createUserDto)
       const { _id } = user
-      const token = this.generateJWT({ _id })
-      return { ...user, token }
+      const token = this.generateJWT({ _id }, '1m')
+      const refresh = this.generateJWT({ _id }, '2m')
+      return { ...user, token, refresh }
+    } catch (error) {
+      this.errorHandler(error)
+    }
+  }
+
+  async refresh(user: User): Promise<LoginResponse> {
+    try {
+      const { _id } = user
+      const token = this.generateJWT({ _id }, '1m')
+      const refresh = this.generateJWT({ _id }, '2m')
+      return { ...user, token, refresh }
     } catch (error) {
       this.errorHandler(error)
     }
@@ -96,8 +109,8 @@ export class AuthService {
     }
   }
 
-  private generateJWT(payload: JwtPayload): string {
-    return this.jwtService.sign(payload, { expiresIn: '1m' })
+  private generateJWT(payload: JwtPayload, expiresIn: string | number): string {
+    return this.jwtService.sign(payload, { expiresIn })
   }
 
   private errorHandler(error: any): void {
