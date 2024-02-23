@@ -87,8 +87,17 @@ export class AuthService {
     }
   }
 
+  async findUserById(id: string): Promise<User> {
+    try {
+      const user = await this.userModel.findById(id).select('-password')
+      return user?.toJSON()
+    } catch (error) {
+      this.errorHandler(error)
+    }
+  }
+
   private generateJWT(payload: JwtPayload): string {
-    return this.jwtService.sign(payload)
+    return this.jwtService.sign(payload, { expiresIn: '1m' })
   }
 
   private errorHandler(error: any): void {
