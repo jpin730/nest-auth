@@ -1,12 +1,14 @@
 import {
   CanActivate,
   ExecutionContext,
+  ForbiddenException,
   HttpException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { AuthService } from '../auth.service'
+import { Role } from '../entities/user.entity'
 import { JwtPayload } from '../interfaces/jwt-payload.interface'
 
 @Injectable()
@@ -17,7 +19,7 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest()
+    const request = context.switchToHttp().getRequest() as Request
     const token = this.extractTokenFromHeader(request)
     if (!token) {
       throw new UnauthorizedException('Token not found')
@@ -32,6 +34,13 @@ export class AuthGuard implements CanActivate {
       }
       if (!user.isActive) {
         throw new UnauthorizedException('User is not active')
+      }
+      if (
+        request.url.includes('user') &&
+        request.method !== 'GET' &&
+        user.role !== Role.Admin
+      ) {
+        throw new ForbiddenException('User is not an admin')
       }
       request['user'] = user
     } catch (error) {
