@@ -11,6 +11,9 @@ async function bootstrap(): Promise<void> {
       forbidNonWhitelisted: true,
     }),
   )
+  app.enableCors({
+    origin: process.env.FRONTEND_URL,
+  })
   const config = new DocumentBuilder()
     .setTitle('Nest Auth API')
     .setDescription(
