@@ -6,4 +6,8 @@ export class CreateUserDto extends LoginDto {
   @ApiProperty()
   @MinLength(4)
   name: string
+
+  @ApiProperty()
+  @MinLength(6)
+  password: string
 }
