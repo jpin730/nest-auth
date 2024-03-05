@@ -115,6 +115,9 @@ export class AuthService {
       if (!compareSync(password, userLogged.password)) {
         throw new UnauthorizedException('Invalid credentials')
       }
+      if (!userLogged.isActive) {
+        throw new UnauthorizedException('User is not active')
+      }
       const { _id } = userLogged
       const token = this.generateJWT({ _id }, this.EXPIRES_IN.TOKEN)
       const refresh = this.generateJWT({ _id }, this.EXPIRES_IN.REFRESH)
