@@ -72,9 +72,13 @@ export class AuthService {
       if (user.email === 'admin@email.com') {
         throw new BadRequestException('You cannot update default admin user')
       }
+      const { password } = updateUserDto
       const updatedUser = await this.userModel.findByIdAndUpdate(
         id,
-        updateUserDto,
+        {
+          ...updateUserDto,
+          password: password && hashSync(password),
+        },
         {
           new: true,
         },
