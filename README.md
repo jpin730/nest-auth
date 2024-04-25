@@ -26,10 +26,6 @@ npm run start:dev
 npm run start:prod
 ```
 
-## Deployment
+## Frontend repository
 
-App deployed on: <https://nest-auth-9jfg.onrender.com>.
-
-Cliente deployed on: <https://angular-auth-jpin730.vercel.app>.
-
-Client repository: <https://github.com/jpin730/angular-auth>
+<https://github.com/jpin730/angular-auth>
