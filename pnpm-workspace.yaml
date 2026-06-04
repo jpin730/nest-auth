@@ -1,0 +1,4 @@
+blockExoticSubdeps: true
+ignoreScripts: true
+minimumReleaseAge: 1440
+saveExact: true

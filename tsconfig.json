@@ -20,6 +20,13 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
     "strictBindCallApply": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@config/*": ["src/config/*"],
+      "@auth/*": ["./src/auth/*"],
+      "@common/*": ["./src/common/*"],
+      "@database/*": ["./src/database/*"],
+      "@health/*": ["./src/health/*"]
+    }
   }
 }
