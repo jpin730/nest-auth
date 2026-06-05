@@ -3,7 +3,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
 
 import { DatabaseEnv } from '@config/schemas/database-env.schema'
 
-export const getDataSource = (env: DatabaseEnv): DataSourceOptions => ({
+export const getDataSourceOptions = (env: DatabaseEnv): DataSourceOptions => ({
   type: 'postgres',
   host: env.DB_HOST,
   port: env.DB_PORT,
