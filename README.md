@@ -45,3 +45,16 @@ For security reasons, scripts are ignored on install. For setting up Husky, run 
 ```bash
 pnpm prepare
 ```
+
+## Database users
+
+Create 2 users, one for migrations and one for CRUD operations:
+
+```sql
+-- Grant create schema permissions to migrations user
+GRANT CREATE ON DATABASE your_database TO migrations_user;
+
+-- Grand CRUD permissions to CRUD user & grant CRUD operations to specific tables
+GRANT USAGE ON SCHEMA public TO crud_user;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE your_table TO crud_user;
+```
