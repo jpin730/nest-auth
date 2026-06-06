@@ -9,6 +9,10 @@ import { type Env } from '../schemas/env.schema'
 export class ConfigService {
   constructor(@Inject(ENV_TOKEN) private readonly env: Env) {}
 
+  get authSaltRounds(): number {
+    return this.env.AUTH_SALT_ROUNDS
+  }
+
   get databaseEnv(): DatabaseEnv {
     return {
       DB_HOST: this.env.DB_HOST,
