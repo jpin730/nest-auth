@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm'
 
-export class Migration1780689964790 implements MigrationInterface {
-  name = 'Migration1780689964790'
+export class Migration1780725649661 implements MigrationInterface {
+  name = 'Migration1780725649661'
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
@@ -17,7 +17,7 @@ export class Migration1780689964790 implements MigrationInterface {
             )
         `)
     await queryRunner.query(`
-            CREATE TYPE "public"."users_role_enum" AS ENUM('admin', 'editor', 'viewer')
+            CREATE TYPE "public"."users_roles_enum" AS ENUM('admin', 'editor', 'viewer')
         `)
     await queryRunner.query(`
             CREATE TABLE "users" (
@@ -29,8 +29,7 @@ export class Migration1780689964790 implements MigrationInterface {
                 "tenant_id" uuid NOT NULL,
                 "email" character varying(255) NOT NULL,
                 "password_hash" character varying(60) NOT NULL,
-                "role" "public"."users_role_enum" NOT NULL DEFAULT 'viewer',
-                CONSTRAINT "UQ_97672ac88f789774dd47f7c8be3" UNIQUE ("email"),
+                "roles" "public"."users_roles_enum" NOT NULL DEFAULT 'viewer',
                 CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id")
             )
         `)
@@ -83,7 +82,7 @@ export class Migration1780689964790 implements MigrationInterface {
             DROP TABLE "users"
         `)
     await queryRunner.query(`
-            DROP TYPE "public"."users_role_enum"
+            DROP TYPE "public"."users_roles_enum"
         `)
     await queryRunner.query(`
             DROP TABLE "tenants"

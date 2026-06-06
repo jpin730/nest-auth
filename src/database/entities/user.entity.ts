@@ -14,7 +14,6 @@ export class UserEntity extends BaseEntity {
   @Column({
     type: 'varchar',
     length: 255,
-    unique: true,
   })
   email: string
 
@@ -29,7 +28,7 @@ export class UserEntity extends BaseEntity {
     enum: UserRole,
     default: UserRole.Viewer,
   })
-  role: UserRole
+  roles: UserRole
 
   @ManyToOne(() => TenantEntity, (e) => e.users)
   @JoinColumn()
