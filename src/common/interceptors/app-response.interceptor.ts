@@ -9,11 +9,11 @@ import {
 import { Reflector } from '@nestjs/core'
 import { catchError, map, Observable, throwError } from 'rxjs'
 
-import { ERROR_MESSAGE } from '../consts/error-message.const'
-import { ErrorMessage } from '../decorators/error-message.decorator'
-import { ApiResponse } from '../schemas/api-response.schema'
-import { getErrorMessage } from '../utils/get-error-message.util'
-import { getErrorStatus } from '../utils/get-error-status.util'
+import { ERROR_MESSAGE } from '@common/consts/error-message.const'
+import { ErrorMessage } from '@common/decorators/error-message.decorator'
+import { ApiResponse } from '@common/types/api-response.type'
+import { getErrorMessage } from '@common/utils/get-error-message.util'
+import { getErrorStatus } from '@common/utils/get-error-status.util'
 
 @Injectable()
 export class AppResponseInterceptor implements NestInterceptor {

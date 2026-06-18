@@ -1,10 +1,10 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, Logger } from '@nestjs/common'
 import { HttpAdapterHost } from '@nestjs/core'
 
-import { ERROR_MESSAGE } from '../consts/error-message.const'
-import { ApiResponse } from '../schemas/api-response.schema'
-import { getErrorMessage } from '../utils/get-error-message.util'
-import { getErrorStatus } from '../utils/get-error-status.util'
+import { ERROR_MESSAGE } from '@common/consts/error-message.const'
+import { ApiResponse } from '@common/types/api-response.type'
+import { getErrorMessage } from '@common/utils/get-error-message.util'
+import { getErrorStatus } from '@common/utils/get-error-status.util'
 
 @Catch()
 export class AppExceptionFilter implements ExceptionFilter<unknown> {
