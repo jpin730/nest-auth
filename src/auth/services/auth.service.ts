@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { hash } from 'bcrypt'
 
-import { ConfigService } from '@config/services/config.service'
+import { AUTH_ERROR_MESSAGE } from '@auth/consts/auth-error-message.const'
+import { RegisterDto } from '@auth/dtos/register.dto'
+import { DatabaseService } from '@auth/services/database.service'
 
-import { AUTH_ERROR_MESSAGE } from '../consts/auth-error-message.const'
-import { RegisterDto } from '../dtos/register.dto'
-import { DatabaseService } from './database.service'
+import { ConfigService } from '@config/services/config.service'
 
 @Injectable()
 export class AuthService {
@@ -16,7 +16,7 @@ export class AuthService {
 
   async register(registerDto: RegisterDto): Promise<void> {
     const { email, password, tenantId } = registerDto
-    const existingUser = await this.databaseService.findExistingUser(email, tenantId)
+    const existingUser = await this.databaseService.findUserByEmail(email, tenantId)
     if (existingUser) {
       throw new BadRequestException(AUTH_ERROR_MESSAGE.EMAIL_ALREADY_EXISTS)
     }

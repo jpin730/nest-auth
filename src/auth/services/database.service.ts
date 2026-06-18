@@ -7,7 +7,7 @@ import { UserEntity } from '@database/entities/user.entity'
 export class DatabaseService {
   constructor(private readonly dataSource: DataSource) {}
 
-  findExistingUser(email: string, tenantId: string): Promise<UserEntity | null> {
+  findUserByEmail(email: string, tenantId: string): Promise<UserEntity | null> {
     return this.dataSource.manager.findOne(UserEntity, {
       where: { email, tenantId },
     })
