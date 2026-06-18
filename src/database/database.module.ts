@@ -5,7 +5,7 @@ import { ConfigModule } from '@config/config.module'
 import { NODE_ENV } from '@config/consts/node-env.const'
 import { ConfigService } from '@config/services/config.service'
 
-import { getDataSourceOptions } from './utils/get-data-source-options.util'
+import { getDataSourceOptions } from '@database/utils/get-data-source-options.util'
 
 @Module({
   imports: [

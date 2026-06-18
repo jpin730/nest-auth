@@ -1,7 +1,7 @@
 import z from 'zod'
 
-import { NODE_ENV } from '../consts/node-env.const'
-import { databaseEnvSchema } from './database-env.schema'
+import { NODE_ENV } from '@config/consts/node-env.const'
+import { databaseEnvSchema } from '@config/schemas/database-env.schema'
 
 export const envSchema = z.object({
   AUTH_SALT_ROUNDS: z.coerce.number().int().min(12),

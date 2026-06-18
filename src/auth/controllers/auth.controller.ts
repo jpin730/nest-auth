@@ -1,10 +1,10 @@
 import { Body, Controller, Post } from '@nestjs/common'
 
-import { ErrorMessage } from '@common/decorators/error-message.decorator'
+import { AUTH_ERROR_MESSAGE } from '@auth/consts/auth-error-message.const'
+import { RegisterDto } from '@auth/dtos/register.dto'
+import { AuthService } from '@auth/services/auth.service'
 
-import { AUTH_ERROR_MESSAGE } from '../consts/auth-error-message.const'
-import { RegisterDto } from '../dtos/register.dto'
-import { AuthService } from '../services/auth.service'
+import { ErrorMessage } from '@common/decorators/error-message.decorator'
 
 @Controller('auth')
 export class AuthController {

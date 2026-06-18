@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany } from 'typeorm'
-import { BaseEntity } from './base.entity'
-import { UserEntity } from './user.entity'
+
+import { BaseEntity } from '@database/entities/base.entity'
+import { UserEntity } from '@database/entities/user.entity'
 
 @Entity('tenants')
 export class TenantEntity extends BaseEntity {

@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common'
 
-import { NodeEnv } from '../consts/node-env.const'
-import { ENV_TOKEN } from '../providers/env.provider'
-import { DatabaseEnv } from '../schemas/database-env.schema'
-import { type Env } from '../schemas/env.schema'
+import { NodeEnv } from '@config/consts/node-env.const'
+import { ENV_TOKEN } from '@config/providers/env.provider'
+import { DatabaseEnv } from '@config/schemas/database-env.schema'
+import { type Env } from '@config/schemas/env.schema'
 
 @Injectable()
 export class ConfigService {

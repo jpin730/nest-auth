@@ -2,7 +2,7 @@ import { ZodValidationException } from 'nestjs-zod'
 import { TypeORMError } from 'typeorm'
 import z from 'zod'
 
-import { zodIssueSchema } from '../schemas/zod-issue.schema'
+import { zodIssueSchema } from '@common/schemas/zod-issue.schema'
 
 const typeORMErrorSchema = z.object({
   driverError: z.object({ message: z.string().trim().min(1) }),

@@ -1,6 +1,6 @@
 import { ValueProvider } from '@nestjs/common'
 
-import { ENV } from '../consts/env.const'
+import { ENV } from '@config/consts/env.const'
 
 export const ENV_TOKEN = Symbol('ENV')
 

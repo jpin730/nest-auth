@@ -1,6 +1,6 @@
 import { config } from 'dotenv'
 
-import { envSchema } from '../schemas/env.schema'
+import { envSchema } from '@config/schemas/env.schema'
 
 config()
 
