@@ -1,6 +1,6 @@
 import z from 'zod'
 
-import { userSchema } from './user.schema'
+import { userSchema } from '@auth/schemas/user.schema'
 
 const [MIN_LENGTH, MAX_LENGTH] = [8, 20]
 const ALLOWED_SPECIAL_CHARS = '!@#$%'
@@ -10,5 +10,5 @@ const REGEXP_MESSAGE = `password must only contain letters, numbers and special 
 
 export const registerSchema = z.object({
   password: z.string().trim().min(MIN_LENGTH).max(MAX_LENGTH).regex(REGEXP, REGEXP_MESSAGE),
-  ...userSchema.omit({ password_hash: true, role: true }).shape,
+  ...userSchema.omit({ password_hash: true }).shape,
 })

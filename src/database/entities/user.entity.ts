@@ -1,9 +1,8 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
 
-import { UserRole } from '@database/enums/user-role.enum'
-import { BaseEntity } from './base.entity'
-import { RefreshTokenEntity } from './refresh-token.entity'
-import { TenantEntity } from './tenant.entity'
+import { BaseEntity } from '@database/entities/base.entity'
+import { RefreshTokenEntity } from '@database/entities/refresh-token.entity'
+import { TenantEntity } from '@database/entities/tenant.entity'
 
 @Entity({ name: 'users' })
 @Index(['email', 'tenantId'] satisfies (keyof UserEntity)[], { unique: true })
@@ -22,13 +21,6 @@ export class UserEntity extends BaseEntity {
     length: 60,
   })
   passwordHash: string
-
-  @Column({
-    type: 'enum',
-    enum: UserRole,
-    default: UserRole.Viewer,
-  })
-  roles: UserRole
 
   @ManyToOne(() => TenantEntity, (e) => e.users)
   @JoinColumn()
