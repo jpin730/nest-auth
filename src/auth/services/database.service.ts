@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { DataSource } from 'typeorm'
 
+import { TenantEntity } from '@database/entities/tenant.entity'
 import { UserEntity } from '@database/entities/user.entity'
 
 @Injectable()
@@ -18,5 +19,9 @@ export class DatabaseService {
       const userEntity = entityManager.create(UserEntity, user)
       await entityManager.save(userEntity)
     })
+  }
+
+  findTenantByName(name: string): Promise<TenantEntity | null> {
+    return this.dataSource.manager.findOne(TenantEntity, { where: { name } })
   }
 }
