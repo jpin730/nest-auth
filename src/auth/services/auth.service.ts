@@ -1,9 +1,12 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
-import { hash } from 'bcrypt'
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common'
+import { compare, hash } from 'bcrypt'
 
 import { AUTH_ERROR_MESSAGE } from '@auth/consts/auth-error-message.const'
+import { LoginDto } from '@auth/dtos/login.dto'
 import { RegisterDto } from '@auth/dtos/register.dto'
+import { TokensDto } from '@auth/dtos/tokens.dto'
 import { DatabaseService } from '@auth/services/database.service'
+import { JwtService } from '@auth/services/jwt.service'
 
 import { ConfigService } from '@config/services/config.service'
 
@@ -12,6 +15,7 @@ export class AuthService {
   constructor(
     private readonly configService: ConfigService,
     private readonly databaseService: DatabaseService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async register(registerDto: RegisterDto): Promise<void> {
@@ -24,8 +28,33 @@ export class AuthService {
     await this.databaseService.createUser({ ...registerDto, passwordHash })
   }
 
+  async login({ email, password }: LoginDto, tenantId: string): Promise<TokensDto> {
+    const user = await this.databaseService.findUserByEmail(email, tenantId)
+    if (!user) {
+      throw new UnauthorizedException(AUTH_ERROR_MESSAGE.INVALID_CREDENTIALS)
+    }
+    const isPasswordValid = await compare(password, user.passwordHash)
+    if (!isPasswordValid) {
+      throw new UnauthorizedException(AUTH_ERROR_MESSAGE.INVALID_CREDENTIALS)
+    }
+    const [accessToken, refreshToken] = await this.generateTokenPair(user.id)
+    await this.storeRefreshToken(refreshToken)
+    return { accessToken, refreshToken }
+  }
+
   private async hashPassword(password: string): Promise<string> {
     const saltRounds = this.configService.authSaltRounds
     return hash(password, saltRounds)
+  }
+
+  private async generateTokenPair(sub: string): Promise<[string, string]> {
+    const accessToken = await this.jwtService.sign(sub, '5 minutes')
+    const refreshToken = await this.jwtService.sign(sub, '1 hour')
+    return [accessToken, refreshToken]
+  }
+
+  private async storeRefreshToken(token: string, oldTokenId?: string): Promise<void> {
+    const payload = this.jwtService.decode(token)
+    await this.databaseService.saveRefreshToken(token, payload, oldTokenId)
   }
 }
