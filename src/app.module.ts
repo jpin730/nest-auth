@@ -1,4 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
+import { ScheduleModule } from '@nestjs/schedule'
 
 import { ConfigModule } from '@config/config.module'
 import { DatabaseModule } from '@database/database.module'
@@ -13,6 +14,7 @@ import { httpLogger } from '@common/middlewares/http-logger.middleware'
   imports: [
     ConfigModule,
     DatabaseModule,
+    ScheduleModule.forRoot(),
 
     // Features
     HealthModule,
