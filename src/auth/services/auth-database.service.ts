@@ -15,8 +15,8 @@ import { UserEntity } from '@database/entities/user.entity'
 export const hashToken = (token: string): string => createHash('sha256').update(token).digest('hex')
 
 @Injectable()
-export class DatabaseService {
-  private readonly logger = new Logger(DatabaseService.name)
+export class AuthDatabaseService {
+  private readonly logger = new Logger(AuthDatabaseService.name)
 
   constructor(private readonly dataSource: DataSource) {}
 

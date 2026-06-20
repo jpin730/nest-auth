@@ -5,7 +5,7 @@ import { AUTH_ERROR_MESSAGE } from '@auth/consts/auth-error-message.const'
 import { LoginDto } from '@auth/dtos/login.dto'
 import { RegisterDto } from '@auth/dtos/register.dto'
 import { TokensDto } from '@auth/dtos/tokens.dto'
-import { DatabaseService } from '@auth/services/database.service'
+import { AuthDatabaseService } from '@auth/services/auth-database.service'
 import { JwtService } from '@auth/services/jwt.service'
 
 import { ConfigService } from '@config/services/config.service'
@@ -14,22 +14,22 @@ import { ConfigService } from '@config/services/config.service'
 export class AuthService {
   constructor(
     private readonly configService: ConfigService,
-    private readonly databaseService: DatabaseService,
+    private readonly authDatabaseService: AuthDatabaseService,
     private readonly jwtService: JwtService,
   ) {}
 
   async register(registerDto: RegisterDto): Promise<void> {
     const { email, password, tenantId } = registerDto
-    const existingUser = await this.databaseService.findUserByEmail(email, tenantId)
+    const existingUser = await this.authDatabaseService.findUserByEmail(email, tenantId)
     if (existingUser) {
       throw new BadRequestException(AUTH_ERROR_MESSAGE.EMAIL_ALREADY_EXISTS)
     }
     const passwordHash = await this.hashPassword(password)
-    await this.databaseService.createUser({ ...registerDto, passwordHash })
+    await this.authDatabaseService.createUser({ ...registerDto, passwordHash })
   }
 
   async login({ email, password }: LoginDto, tenantId: string): Promise<TokensDto> {
-    const user = await this.databaseService.findUserByEmail(email, tenantId)
+    const user = await this.authDatabaseService.findUserByEmail(email, tenantId)
     if (!user) {
       throw new UnauthorizedException(AUTH_ERROR_MESSAGE.INVALID_CREDENTIALS)
     }
@@ -55,6 +55,6 @@ export class AuthService {
 
   private async storeRefreshToken(token: string, oldTokenId?: string): Promise<void> {
     const payload = this.jwtService.decode(token)
-    await this.databaseService.saveRefreshToken(token, payload, oldTokenId)
+    await this.authDatabaseService.saveRefreshToken(token, payload, oldTokenId)
   }
 }
