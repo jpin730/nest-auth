@@ -1,7 +1,8 @@
-import { ZodValidationException } from 'nestjs-zod'
+import { ZodSerializationException, ZodValidationException } from 'nestjs-zod'
 import { TypeORMError } from 'typeorm'
 import z from 'zod'
 
+import { ERROR_MESSAGE } from '@common/consts/error-message.const'
 import { zodIssueSchema } from '@common/schemas/zod-issue.schema'
 
 const typeORMErrorSchema = z.object({
@@ -37,6 +38,9 @@ export const getErrorMessage = (error: unknown): string | null => {
       break
     case error instanceof ZodValidationException:
       message = getZodValidationExceptionMessage(error)
+      break
+    case error instanceof ZodSerializationException:
+      message = ERROR_MESSAGE.SERIALIZATION
       break
     case error instanceof Error:
       message = error.message
