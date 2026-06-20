@@ -4,6 +4,8 @@ import { NODE_ENV } from '@config/consts/node-env.const'
 import { databaseEnvSchema } from '@config/schemas/database-env.schema'
 
 export const envSchema = z.object({
+  AUTH_JWT_PRIVATE_KEY: z.base64().trim().min(1),
+  AUTH_JWT_PUBLIC_KEY: z.base64().trim().min(1),
   AUTH_SALT_ROUNDS: z.coerce.number().int().min(12),
   NODE_ENV: z.enum(NODE_ENV),
   PORT: z.coerce.number().int().min(1).max(65535),

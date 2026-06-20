@@ -26,6 +26,9 @@ importers:
       dotenv:
         specifier: 17.4.2
         version: 17.4.2
+      jose:
+        specifier: 6.2.3
+        version: 6.2.3
       morgan:
         specifier: 1.11.0
         version: 1.11.0
@@ -1519,6 +1522,9 @@ packages:
   jest-worker@27.5.1:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
+
+  jose@6.2.3:
+    resolution: {integrity: sha512-YYVDInQKFJfR/xa3ojUTl8c2KoTwiL1R5Wg9YCydwH0x0B9grbzlg5HC7mMjCtUJjbQ/YnGEZIhI5tCgfTb4Hw==}
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -3858,6 +3864,8 @@ snapshots:
       '@types/node': 25.9.3
       merge-stream: 2.0.0
       supports-color: 8.1.1
+
+  jose@6.2.3: {}
 
   js-tokens@4.0.0: {}
 

@@ -9,6 +9,14 @@ import { type Env } from '@config/schemas/env.schema'
 export class ConfigService {
   constructor(@Inject(ENV_TOKEN) private readonly env: Env) {}
 
+  get authJwtPrivateKey(): string {
+    return this.env.AUTH_JWT_PRIVATE_KEY
+  }
+
+  get authJwtPublicKey(): string {
+    return this.env.AUTH_JWT_PUBLIC_KEY
+  }
+
   get authSaltRounds(): number {
     return this.env.AUTH_SALT_ROUNDS
   }
