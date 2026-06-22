@@ -1,5 +1,5 @@
 import z from 'zod'
 
-import { TokenPayloadSchema } from '@auth/schemas/token-payload.schema'
+import { tokenPayloadSchema } from '@auth/schemas/token-payload.schema'
 
-export type TokenPayload = z.infer<typeof TokenPayloadSchema>
+export type TokenPayload = z.infer<typeof tokenPayloadSchema>

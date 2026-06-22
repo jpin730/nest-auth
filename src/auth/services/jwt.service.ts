@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { decodeJwt, importPKCS8, importSPKI, jwtVerify, SignJWT } from 'jose'
 
-import { TokenPayloadSchema } from '@auth/schemas/token-payload.schema'
+import { tokenPayloadSchema } from '@auth/schemas/token-payload.schema'
 import { TokenPayload } from '@auth/types/token-payload.type'
 
 import { ConfigService } from '@config/services/config.service'
@@ -37,11 +37,11 @@ export class JwtService {
   }
 
   decode(token: string): TokenPayload {
-    return TokenPayloadSchema.parse(decodeJwt(token))
+    return tokenPayloadSchema.parse(decodeJwt(token))
   }
 
   async verifyAsync(token: string): Promise<TokenPayload> {
     const { payload } = await jwtVerify(token, this.publicKey)
-    return TokenPayloadSchema.parse(payload)
+    return tokenPayloadSchema.parse(payload)
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { Cron, CronExpression } from '@nestjs/schedule'
 import { createHash } from 'crypto'
-import { DataSource, LessThan } from 'typeorm'
+import { DataSource, LessThan, MoreThan } from 'typeorm'
 
 import { AUTH_ERROR_MESSAGE } from '@auth/consts/auth-error-message.const'
 import { TokenPayload } from '@auth/types/token-payload.type'
@@ -20,10 +20,12 @@ export class AuthDatabaseService {
 
   constructor(private readonly dataSource: DataSource) {}
 
+  findUserById(id: string, tenantId: string): Promise<UserEntity | null> {
+    return this.dataSource.manager.findOne(UserEntity, { where: { id, tenantId } })
+  }
+
   findUserByEmail(email: string, tenantId: string): Promise<UserEntity | null> {
-    return this.dataSource.manager.findOne(UserEntity, {
-      where: { email, tenantId },
-    })
+    return this.dataSource.manager.findOne(UserEntity, { where: { email, tenantId } })
   }
 
   async createUser(user: Partial<UserEntity>): Promise<void> {
@@ -37,12 +39,19 @@ export class AuthDatabaseService {
     return this.dataSource.manager.findOne(TenantEntity, { where: { name } })
   }
 
+  findRefreshTokenByHash(token: string, userId: string): Promise<RefreshTokenEntity | null> {
+    return this.dataSource.manager.findOne(RefreshTokenEntity, {
+      where: { tokenHash: hashToken(token), expiresAt: MoreThan(new Date()), userId },
+    })
+  }
+
   async saveRefreshToken(token: string, payload: TokenPayload, oldTokenId?: string): Promise<void> {
     await this.dataSource.transaction(async (entityManager) => {
       const refreshToken = entityManager.create(RefreshTokenEntity, {
         userId: payload.sub,
         tokenHash: hashToken(token),
         expiresAt: new Date(payload.exp * 1000),
+        createdBy: payload.sub,
       })
       await entityManager.save(refreshToken)
       if (oldTokenId) {

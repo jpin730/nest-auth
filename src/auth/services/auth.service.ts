@@ -8,6 +8,8 @@ import { TokensDto } from '@auth/dtos/tokens.dto'
 import { AuthDatabaseService } from '@auth/services/auth-database.service'
 import { JwtService } from '@auth/services/jwt.service'
 
+import { ApiRequest } from '@common/types/api-request.type'
+
 import { ConfigService } from '@config/services/config.service'
 
 @Injectable()
@@ -39,6 +41,16 @@ export class AuthService {
     }
     const [accessToken, refreshToken] = await this.generateTokenPair(user.id)
     await this.storeRefreshToken(refreshToken)
+    return { accessToken, refreshToken }
+  }
+
+  async refresh({ token, userId }: ApiRequest): Promise<TokensDto> {
+    const storedToken = await this.authDatabaseService.findRefreshTokenByHash(token, userId)
+    if (!storedToken) {
+      throw new UnauthorizedException(AUTH_ERROR_MESSAGE.INVALID_CREDENTIALS)
+    }
+    const [accessToken, refreshToken] = await this.generateTokenPair(userId)
+    await this.storeRefreshToken(refreshToken, storedToken.id)
     return { accessToken, refreshToken }
   }
 

@@ -1,6 +1,6 @@
 import z from 'zod'
 
-export const TokenPayloadSchema = z.object({
+export const tokenPayloadSchema = z.object({
   sub: z.uuid(),
   exp: z.int().positive(),
 })
