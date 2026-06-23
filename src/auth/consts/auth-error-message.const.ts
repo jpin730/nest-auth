@@ -3,6 +3,7 @@ export const AUTH_ERROR_MESSAGE = {
   FAILED_CLEANUP_EXPIRED_TOKENS: 'Failed to cleanup expired refresh tokens',
   INVALID_CREDENTIALS: 'Invalid credentials',
   INVALID_TENANT: 'Invalid tenant',
+  INVALID_TOKEN: 'Invalid token',
   TENANT_NOT_ALLOWED: 'Tenant not allowed',
   UNAVAILABLE_LOGIN: 'Unable to login at the moment, please try again later',
   UNAVAILABLE_LOGOUT: 'Unable to logout at the moment, please try again later',
