@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common'
+import { Body, Controller, Patch, Post, Req, UseGuards } from '@nestjs/common'
 import { ZodSerializerDto } from 'nestjs-zod'
 
 import { AUTH_ERROR_MESSAGE } from '@auth/consts/auth-error-message.const'
@@ -7,6 +7,7 @@ import { AllowedTenants } from '@auth/decorators/allowed-tenants.decorator'
 import { Public } from '@auth/decorators/public.decorator'
 import { TenantId } from '@auth/decorators/tenant-id.decorator'
 import { LoginDto } from '@auth/dtos/login.dto'
+import { PatchMeDto } from '@auth/dtos/patch-me.dto'
 import { RegisterDto } from '@auth/dtos/register.dto'
 import { TokensDto } from '@auth/dtos/tokens.dto'
 import { TenantGuard } from '@auth/guards/tenant.guard'
@@ -47,5 +48,11 @@ export class AuthController {
   @ErrorMessage(AUTH_ERROR_MESSAGE.UNAVAILABLE_LOGOUT)
   async logout(@Req() req: ApiRequest): Promise<void> {
     await this.authService.logout(req)
+  }
+
+  @Patch('me')
+  @ErrorMessage(AUTH_ERROR_MESSAGE.UNAVAILABLE_PATCH_ME)
+  async updateMe(@Req() req: ApiRequest, @Body() body: PatchMeDto): Promise<void> {
+    await this.authService.patchUser(req, body)
   }
 }

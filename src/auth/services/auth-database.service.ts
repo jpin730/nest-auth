@@ -66,6 +66,14 @@ export class AuthDatabaseService {
     })
   }
 
+  async updateUser(id: string, updates: Partial<UserEntity>): Promise<void> {
+    const updatedBy = id
+    const updatedAt = new Date()
+    await this.dataSource.transaction(async (entityManager) => {
+      await entityManager.update(UserEntity, { id }, { ...updates, updatedBy, updatedAt })
+    })
+  }
+
   @Cron(CronExpression.EVERY_HOUR)
   async cleanupExpiredTokens(): Promise<void> {
     try {

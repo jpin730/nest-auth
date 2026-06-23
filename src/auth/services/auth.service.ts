@@ -3,12 +3,14 @@ import { compare, hash } from 'bcrypt'
 
 import { AUTH_ERROR_MESSAGE } from '@auth/consts/auth-error-message.const'
 import { LoginDto } from '@auth/dtos/login.dto'
+import { PatchMeDto } from '@auth/dtos/patch-me.dto'
 import { RegisterDto } from '@auth/dtos/register.dto'
 import { TokensDto } from '@auth/dtos/tokens.dto'
 import { tokenSchema } from '@auth/schemas/tokens.shema'
 import { AuthDatabaseService } from '@auth/services/auth-database.service'
 import { JwtService } from '@auth/services/jwt.service'
 
+import { ERROR_MESSAGE } from '@common/consts/error-message.const'
 import { ApiRequest } from '@common/types/api-request.type'
 
 import { ConfigService } from '@config/services/config.service'
@@ -51,6 +53,12 @@ export class AuthService {
     const storedToken = await this.authDatabaseService.findRefreshTokenByHash(token, userId)
     if (!storedToken) throw new UnauthorizedException(AUTH_ERROR_MESSAGE.INVALID_CREDENTIALS)
     await this.authDatabaseService.deleteRefreshToken(storedToken.id, userId)
+  }
+
+  async patchUser({ userId }: ApiRequest, patchMeDto: PatchMeDto): Promise<void> {
+    if (!patchMeDto.password) throw new BadRequestException(ERROR_MESSAGE.NO_FIELDS_TO_UPDATE)
+    const passwordHash = await this.hashPassword(patchMeDto.password)
+    await this.authDatabaseService.updateUser(userId, { passwordHash })
   }
 
   async validateTenant(tenantId: string): Promise<string> {
