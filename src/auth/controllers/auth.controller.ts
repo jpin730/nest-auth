@@ -42,4 +42,10 @@ export class AuthController {
   async refresh(@Req() req: ApiRequest): Promise<TokensDto> {
     return this.authService.refresh(req)
   }
+
+  @Post('logout')
+  @ErrorMessage(AUTH_ERROR_MESSAGE.UNAVAILABLE_LOGOUT)
+  async logout(@Req() req: ApiRequest): Promise<void> {
+    await this.authService.logout(req)
+  }
 }

@@ -47,6 +47,12 @@ export class AuthService {
     return { accessToken, refreshToken }
   }
 
+  async logout({ token, userId }: ApiRequest): Promise<void> {
+    const storedToken = await this.authDatabaseService.findRefreshTokenByHash(token, userId)
+    if (!storedToken) throw new UnauthorizedException(AUTH_ERROR_MESSAGE.INVALID_CREDENTIALS)
+    await this.authDatabaseService.deleteRefreshToken(storedToken.id, userId)
+  }
+
   async validateTenant(tenantId: string): Promise<string> {
     const tenant = await this.authDatabaseService.findTenantByName(tenantId)
     if (!tenant) throw new BadRequestException(AUTH_ERROR_MESSAGE.INVALID_TENANT)

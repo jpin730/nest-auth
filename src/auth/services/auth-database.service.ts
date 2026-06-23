@@ -60,6 +60,12 @@ export class AuthDatabaseService {
     })
   }
 
+  async deleteRefreshToken(id: string, userId: string): Promise<void> {
+    await this.dataSource.transaction(async (entityManager) => {
+      await entityManager.delete(RefreshTokenEntity, { id, userId })
+    })
+  }
+
   @Cron(CronExpression.EVERY_HOUR)
   async cleanupExpiredTokens(): Promise<void> {
     try {
