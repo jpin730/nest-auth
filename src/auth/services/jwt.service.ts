@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { decodeJwt, importPKCS8, importSPKI, jwtVerify, SignJWT } from 'jose'
 
+import { AUTH_ERROR_MESSAGE } from '@auth/consts/auth-error-message.const'
 import { tokenPayloadSchema } from '@auth/schemas/token-payload.schema'
 import { TokenPayload } from '@auth/types/token-payload.type'
 
@@ -13,6 +14,8 @@ const JWT_ALGORITHM = 'EdDSA'
 
 @Injectable()
 export class JwtService {
+  private readonly logger = new Logger(JwtService.name)
+
   private privateKey: CryptoKey
   private publicKey: CryptoKey
 
@@ -40,8 +43,14 @@ export class JwtService {
     return tokenPayloadSchema.parse(decodeJwt(token))
   }
 
-  async verifyAsync(token: string): Promise<TokenPayload> {
-    const { payload } = await jwtVerify(token, this.publicKey)
-    return tokenPayloadSchema.parse(payload)
+  async verifyAsync(token: string): Promise<TokenPayload | null> {
+    try {
+      const { payload } = await jwtVerify(token, this.publicKey)
+      return tokenPayloadSchema.parse(payload)
+    } catch (error) {
+      this.logger.error(AUTH_ERROR_MESSAGE.TOKEN_VERIFICATION_FAILED)
+      if (error instanceof Error) this.logger.error(error.message)
+      return null
+    }
   }
 }

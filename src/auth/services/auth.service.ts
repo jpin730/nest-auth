@@ -70,7 +70,9 @@ export class AuthService {
   async validateToken(rawToken: string, tenantId: string): Promise<string> {
     const parseResult = tokenSchema.safeParse(rawToken)
     if (!parseResult.success) throw new BadRequestException(AUTH_ERROR_MESSAGE.INVALID_TOKEN)
-    const { sub: userId } = await this.jwtService.verifyAsync(parseResult.data)
+    const payload = await this.jwtService.verifyAsync(parseResult.data)
+    if (!payload) throw new UnauthorizedException(AUTH_ERROR_MESSAGE.INVALID_TOKEN)
+    const userId = payload.sub
     const user = await this.authDatabaseService.findUserById(userId, tenantId)
     if (!user) throw new UnauthorizedException(AUTH_ERROR_MESSAGE.INVALID_CREDENTIALS)
     return userId

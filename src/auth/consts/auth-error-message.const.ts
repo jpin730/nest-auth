@@ -5,6 +5,7 @@ export const AUTH_ERROR_MESSAGE = {
   INVALID_TENANT: 'Invalid tenant',
   INVALID_TOKEN: 'Invalid token',
   TENANT_NOT_ALLOWED: 'Tenant not allowed',
+  TOKEN_VERIFICATION_FAILED: 'Token verification failed',
   UNAVAILABLE_LOGIN: 'Unable to login at the moment, please try again later',
   UNAVAILABLE_LOGOUT: 'Unable to logout at the moment, please try again later',
   UNAVAILABLE_PATCH_ME: 'Unable to update user at the moment, please try again later',

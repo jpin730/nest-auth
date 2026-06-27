@@ -4,6 +4,7 @@ import { ScheduleModule } from '@nestjs/schedule'
 import { ConfigModule } from '@config/config.module'
 import { DatabaseModule } from '@database/database.module'
 
+import { AdminModule } from '@admin/admin.module'
 import { AuthModule } from '@auth/auth.module'
 import { HealthModule } from '@health/health.module'
 
@@ -17,8 +18,9 @@ import { httpLogger } from '@common/middlewares/http-logger.middleware'
     ScheduleModule.forRoot(),
 
     // Features
-    HealthModule,
+    AdminModule,
     AuthModule,
+    HealthModule,
   ],
   providers: [...APP_PROVIDERS],
 })
